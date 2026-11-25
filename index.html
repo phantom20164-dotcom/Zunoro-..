@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ZUNORO</title>
+<link rel="manifest" href="manifest.json"><meta name="theme-color" content="#000000">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}html,body{height:100%;background:#000;overflow:hidden}
+#s{position:fixed;inset:0;background:#000 url(assets/splash.jpg) center/cover;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:12vh;animation:bg 3s ease-out forwards}
+#s::before{content:"";position:absolute;inset:0;background:linear-gradient(transparent 40%,#000 100%)}
+#s::after{content:"";position:absolute;top:0;bottom:0;width:40%;left:-60%;background:linear-gradient(100deg,transparent,rgba(255,215,0,.35),transparent);animation:sh 1.6s .5s ease-in-out forwards}
+@keyframes bg{from{transform:scale(1.15);opacity:0}25%{opacity:1}to{transform:scale(1)}}
+@keyframes sh{to{left:130%}}
+h1{position:relative;z-index:2;color:#ffd400;font:800 34px Arial,sans-serif;letter-spacing:4px;opacity:0;animation:t 1.4s .8s ease-out forwards}
+@keyframes t{from{letter-spacing:22px;opacity:0}to{letter-spacing:7px;opacity:1}}
+.b{position:relative;z-index:2;margin-top:22px;width:150px;height:3px;background:#2a2a2a;border-radius:3px;overflow:hidden}
+.b i{display:block;height:100%;width:0;background:#ffd400;animation:l 2.4s .5s ease-in-out forwards}
+@keyframes l{to{width:100%}}
+body.out #s{opacity:0;transition:opacity .5s}
+</style></head><body>
+<div id="s"><h1>ZUNORO</h1><div class="b"><i></i></div></div>
+<script>
+let g=0;function go(){if(g)return;g=1;document.body.classList.add('out');setTimeout(()=>location.replace('home.html'),450)}
+setTimeout(go,3200);document.addEventListener('click',go);
+if('serviceWorker' in navigator)navigator.serviceWorker.register('sw.js').catch(()=>{});
+</script></body></html>

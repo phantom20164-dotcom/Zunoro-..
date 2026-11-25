@@ -1,0 +1,112 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>ZUNORO</title><link rel="manifest" href="manifest.json">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{background:#000;color:#fff;font-family:Arial,sans-serif;padding:calc(66px + env(safe-area-inset-top)) 0 calc(78px + env(safe-area-inset-bottom));overflow-x:hidden}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+header{position:fixed;top:0;left:0;right:0;z-index:50;background:#000;padding:calc(8px + env(safe-area-inset-top)) 12px 8px;display:flex;align-items:center;gap:10px}
+.logo{color:#ffd400;font-weight:800;font-size:22px;letter-spacing:1px}
+.sb{flex:1;background:#222;border-radius:22px;padding:11px 14px;color:#999;font-size:14px;text-align:left}
+.ib{position:relative;font-size:20px;padding:4px}.bd{position:absolute;top:-4px;right:-4px;background:#e50914;border-radius:9px;font-size:10px;min-width:17px;height:17px;line-height:17px;text-align:center}
+nav{position:fixed;bottom:0;left:0;right:0;z-index:50;background:#0b0b0b;border-top:1px solid #222;display:flex;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;padding:9px 0;font-size:11px;color:#999}nav button b{display:block;font-size:21px;font-weight:400}nav .on{color:#ffd400}
+.scr{display:none;animation:f .25s}.scr.on{display:block}@keyframes f{from{opacity:0}}
+.h{color:#ffd400;font-size:21px;font-weight:700;padding:14px 14px 8px}.h2{font-size:19px;font-weight:700;padding:14px 14px 8px}
+.row{display:flex;gap:10px;overflow-x:auto;padding:0 14px;scroll-snap-type:x mandatory;scrollbar-width:none}.row::-webkit-scrollbar{display:none}
+.p{flex:none;position:relative;width:120px;height:175px;border-radius:12px;overflow:hidden;scroll-snap-align:start;background-size:cover;background-position:center;display:flex;align-items:flex-end;padding:8px;font-size:13px;font-weight:700;text-shadow:0 1px 6px #000;cursor:pointer}
+.hero .p{width:82vw;max-width:420px;height:200px;font-size:20px}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 14px}.grid .p{width:auto;height:165px}
+.card{background:#151515;border-radius:14px;margin:12px 14px;padding:14px}
+input,textarea,select{width:100%;background:#222;color:#fff;border:1px solid #333;border-radius:10px;padding:12px;margin:6px 0;font:inherit}
+.btn{background:#ffd400;color:#000;font-weight:700;border-radius:22px;padding:11px 18px;margin:4px 4px 4px 0}.btn.g{background:#262626;color:#fff}
+.li{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:12px 0;border-bottom:1px solid #262626}.mut{color:#999;font-size:13px}
+.ovl{position:fixed;inset:0;z-index:100;background:#050505;overflow-y:auto;padding:calc(10px + env(safe-area-inset-top)) 14px 30px;display:none}.ovl.on{display:block}
+.pb{height:4px;background:#333;border-radius:3px;margin-top:6px}.pb i{display:block;height:100%;background:#ffd400;border-radius:3px}
+.msg{max-width:78%;padding:9px 12px;border-radius:14px;margin:6px 0;background:#262626;overflow-wrap:anywhere}.msg.me{margin-left:auto;background:#7a6200}
+.av{width:84px;height:84px;border-radius:50%;background:#333 center/cover;border:3px solid #ffd400;margin:auto}
+.chip{display:inline-block;background:#222;border-radius:16px;padding:7px 12px;margin:3px}
+#shorts{position:fixed;inset:0;z-index:40;background:#000;overflow-y:scroll;scroll-snap-type:y mandatory;padding:0}
+.sc{height:100dvh;position:relative;scroll-snap-align:start}.sc video{width:100%;height:100%;object-fit:cover}
+.sa{position:absolute;right:12px;bottom:calc(130px + env(safe-area-inset-bottom));display:grid;gap:18px;text-align:center;font-size:24px}.sa small{display:block;font-size:11px}
+.sn{position:absolute;left:14px;bottom:calc(100px + env(safe-area-inset-bottom));font-weight:700;text-shadow:0 1px 6px #000}
+video{background:#000;width:100%;border-radius:12px}
+</style></head><body>
+<header><div class="logo">ZUNORO</div><button class="sb" onclick="ov('search')">🔍 Search...</button><button class="ib" onclick="openChat()">💬</button><button class="ib" onclick="openN()">🔔<span class="bd" id="bd"></span></button></header>
+<main>
+<section class="scr on" id="home"></section><section class="scr" id="shorts"></section><section class="scr" id="account"></section><section class="scr" id="downloads"></section><section class="scr" id="library"></section>
+</main>
+<nav id="nav"><button data-s="home" class="on"><b>⌂</b>Home</button><button data-s="shorts"><b>▶</b>Shorts</button><button data-s="account"><b>👤</b>Account</button><button data-s="downloads"><b>⬇</b>Downloads</button><button data-s="library"><b>▤</b>Library</button></nav>
+<div class="ovl" id="search"><button class="btn g" onclick="cl()">← Back</button><input id="q" placeholder="Search movies, series..." oninput="doSearch()"><div id="rc"></div><div id="sr" class="grid" style="padding:0;margin-top:10px"></div></div>
+<div class="ovl" id="notif"><button class="btn g" onclick="cl()">← Back</button><h2 class="h" style="padding-left:0">🔔 Notifications</h2><button class="btn" onclick="S.notifs.forEach(n=>n.r=1);save();renN()">Mark all read</button><button class="btn g" onclick="S.notifs=[];save();renN()">Clear all</button><div id="nl"></div></div>
+<div class="ovl" id="chat"><button class="btn g" onclick="chatBack()">← Back</button><div id="cb"></div></div>
+<div class="ovl" id="detail"><button class="btn g" onclick="cl()">← Back</button><div id="dv"></div></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let S;try{S=JSON.parse(localStorage.getItem('zn'))}catch(e){}
+S=Object.assign({list:[],likes:[],dl:{},hist:[],cm:{},chats:{},recent:[],notifs:[{m:'Welcome to ZUNORO! 🎬',t:Date.now(),r:0}],p:{name:'',user:'',bio:'',photo:''},set:{auto:1,notif:1,priv:0,lang:'English'}},S||{});
+const save=()=>{try{localStorage.setItem('zn',JSON.stringify(S))}catch(e){alert('Storage full')}};
+const B='https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/',V=['BigBuckBunny','ElephantsDream','ForBiggerBlazes','ForBiggerFun','ForBiggerJoyrides','Sintel'].map(x=>B+x+'.mp4');
+// ===== CONTENT: apne titles/poster(img)/video(v) links yahan badlo =====
+const mk=(a,g)=>a.map(([id,t,y])=>({id,t,g,y,img:'',v:V[id%V.length]}));
+const FEAT=mk([[1,'Midnight Crown',2025],[2,'Shadow Protocol',2024],[3,'Last Horizon',2025],[4,'Iron Dynasty',2023]],'Featured');
+const MOV=mk([[5,'Neon Streets',2024],[6,'The Hollow',2023],[7,'Red Harbor',2025],[8,'Wild Frontier',2022],[9,'Zero Hour',2024],[10,'Silver Lining',2021],[11,'Dark Tide',2025],[12,'Echo Valley',2023]],'Movies & Web Series');
+const HIS=mk([[13,'The Last Kingdom Era',2020],[14,'Queen of Ashes',2019],[15,'House of Thorns',2021],[16,'Crown & Blood',2018],[17,'Sword of Dawn',2022],[18,'Empire Rising',2017]],'History & Classics');
+const ALL=[...FEAT,...MOV,...HIS],SH=[V[2],V[3],V[4]];
+const poster=(it,c='')=>{const h=it.id*47%360;return `<div class="p ${c}" onclick="detail(${it.id})" style="background-image:${it.img?`url(${it.img})`:`linear-gradient(160deg,hsl(${h},55%,28%),hsl(${h+50},60%,8%))`}">${it.img?'':it.t}</div>`};
+const row=(t,a,c)=>`<div class="h2">${t}</div><div class="row ${c||''}">${a.map(i=>poster(i,c?'':'')).join('')}</div>`;
+// ===== overlay stack (Android back button support) =====
+const stack=[];function ov(id){$('#'+id).classList.add('on');stack.push(id);history.pushState({o:id},'')}
+function cl(){stack.length&&history.back()}
+addEventListener('popstate',()=>{const id=stack.pop();if(id){const e=$('#'+id);e.classList.remove('on');e.querySelectorAll('video').forEach(v=>v.pause())}});
+function share(t){const d={title:t,text:'Watch '+t+' on ZUNORO!'};navigator.share?navigator.share(d).catch(()=>{}):navigator.clipboard?.writeText(d.text).then(()=>alert('Copied!'))}
+// ===== notifications =====
+function addN(m){S.notifs.unshift({m,t:Date.now(),r:0});save();upd()}
+function upd(){const n=S.notifs.filter(x=>!x.r).length;$('#bd').textContent=n||'';$('#bd').style.display=n?'':'none'}
+function renN(){upd();$('#nl').innerHTML=S.notifs.length?S.notifs.map(n=>`<div class="card" style="margin:8px 0;${n.r?'':'border-left:3px solid #ffd400'}">${esc(n.m)}<div class="mut">${new Date(n.t).toLocaleString()}</div></div>`).join(''):'<p class="mut" style="margin-top:20px">No notifications yet.</p>'}
+function openN(){renN();ov('notif')}
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+// ===== detail / player / actions =====
+const tg=(k,id)=>{const a=S[k],i=a.indexOf(id);i<0?a.push(id):a.splice(i,1);save();return i<0};
+function detail(id,re){const it=ALL.find(x=>x.id==id);if(!it)return;const L=S.list.includes(id),K=S.likes.includes(id),D=S.dl[id];
+$('#dv').innerHTML=`<div id="pl" class="p" style="width:100%;height:210px;font-size:24px;cursor:default;background-image:linear-gradient(160deg,hsl(${id*47%360},55%,28%),#000)">${it.t}</div><h2 style="margin-top:12px">${it.t}</h2><p class="mut">${it.y} • ${it.g} • HD</p>
+<div style="margin:12px 0"><button class="btn" onclick="play(${id})">▶ Play</button><button class="btn g" onclick="act('list',${id})">${L?'✓ My List':'＋ My List'}</button><button class="btn g" onclick="act('likes',${id})">${K?'♥ Liked':'♡ Like'}</button><button class="btn g" onclick="dl(${id})">${D==100?'✓ Downloaded':D?'Downloading '+D+'%':'⬇ Download'}</button><button class="btn g" onclick="share('${it.t}')">↗ Share</button></div>
+<p class="mut">Add your own description in the content section of the code.</p>`;ov('detail')}
+function act(k,id){const on=tg(k,id);addN((on?'Added: ':'Removed: ')+ALL.find(x=>x.id==id).t+(k=='list'?' (My List)':' (Liked)'));detail(id,1)}
+function play(id){const it=ALL.find(x=>x.id==id);$('#pl').outerHTML=`<video id="pv" controls playsinline autoplay src="${it.v}"></video>`;S.hist=[id,...S.hist.filter(x=>x!=id)].slice(0,30);save()}
+function dl(id){if(S.dl[id])return;S.dl[id]=1;save();addN('Download started: '+ALL.find(x=>x.id==id).t);const t=setInterval(()=>{S.dl[id]=Math.min(100,(S.dl[id]||0)+10);save();if(S.dl[id]>=100){clearInterval(t);addN('Download complete: '+ALL.find(x=>x.id==id).t)}if($('#downloads').classList.contains('on'))renD()},500);alert('Download started')}
+// ===== search =====
+function doSearch(){const q=$('#q').value.trim().toLowerCase();$('#rc').innerHTML=q?'':S.recent.map(r=>`<span class="chip" onclick="$('#q').value='${esc(r)}';doSearch()">${esc(r)}</span>`).join('');
+const r=q?ALL.filter(i=>(i.t+i.g+i.y).toLowerCase().includes(q)):[];if(q&&r.length){S.recent=[q,...S.recent.filter(x=>x!=q)].slice(0,8);save()}
+$('#sr').innerHTML=q&&!r.length?'<p class="mut">No results</p>':r.map(i=>poster(i)).join('')}
+// ===== chat (local demo; real multi-user chat needs a backend) =====
+const CT=['ZUNORO Support','Movie Club'];let cw=null;const BOT=['Thanks for messaging ZUNORO! 😊','Got it, we will help you shortly.','Try the Search bar to find your favourite shows.','Enjoy watching! 🎬'];
+function openChat(){cw=null;renC();ov('chat')}
+function chatBack(){cw?(cw=null,renC()):cl()}
+function renC(){if(!cw){$('#cb').innerHTML='<h2 class="h" style="padding-left:0">💬 Messages</h2>'+CT.map(c=>{const m=(S.chats[c]||[]).slice(-1)[0];return `<div class="card" style="margin:8px 0" onclick="cw='${c}';renC()"><b>${c}</b><div class="mut">${m?esc(m.t):'Say hi 👋'}</div></div>`}).join('');return}
+$('#cb').innerHTML=`<h3 style="margin:8px 0">${cw}</h3><div>${(S.chats[cw]||[]).map(m=>`<div class="msg ${m.me?'me':''}">${esc(m.t)}</div>`).join('')}</div><div style="display:flex;gap:8px;margin-top:10px"><input id="ci" placeholder="Message..." onkeydown="event.key=='Enter'&&sendC()"><button class="btn" onclick="sendC()">Send</button></div>`;scrollTo(0,document.body.scrollHeight)}
+function sendC(){const v=$('#ci').value.trim();if(!v)return;const c=cw;(S.chats[c]=S.chats[c]||[]).push({t:v,me:1});save();renC();setTimeout(()=>{S.chats[c].push({t:BOT[Math.random()*BOT.length|0]});save();cw==c?renC():addN('New message from '+c)},900)}
+// ===== shorts (+ uploads stored in IndexedDB) =====
+const db=()=>new Promise(r=>{const q=indexedDB.open('zn',1);q.onupgradeneeded=()=>q.result.createObjectStore('s',{autoIncrement:true});q.onsuccess=()=>r(q.result)});
+const idb=async(m,v)=>{const d=await db();return new Promise(r=>{const o=d.transaction('s',m?'readwrite':'readonly').objectStore('s'),q=m?o.add(v):o.getAll();q.onsuccess=()=>r(q.result)})};
+async function renS(){const up=(await idb(0)).map(b=>URL.createObjectURL(b)),L=[...up,...SH];
+$('#shorts').innerHTML=`<button class="btn g" style="position:fixed;z-index:5;top:calc(12px + env(safe-area-inset-top));left:12px" onclick="show('home')">✕</button>`+L.map((s,i)=>`<div class="sc"><video src="${s}" loop muted playsinline></video><div class="sn">@zunoro • Short #${i+1}</div><div class="sa"><button onclick="sl(${i},this)">${S.likes.includes('s'+i)?'❤️':'♡'}</button><button onclick="sc(${i},this)">💬<small>${S.cm['s'+i]||0}</small></button><button onclick="share('ZUNORO Short')">↗</button></div></div>`).join('');
+const o=new IntersectionObserver(e=>e.forEach(x=>{const v=x.target.querySelector('video');x.isIntersecting?v.play().catch(()=>{}):v.pause()}),{threshold:.7});$$('#shorts .sc').forEach(c=>o.observe(c))}
+function sl(i,b){b.textContent=tg('likes','s'+i)?'❤️':'♡'}
+function sc(i,b){const m=prompt('Write a comment:');if(m&&m.trim()){S.cm['s'+i]=(S.cm['s'+i]||0)+1;save();b.querySelector('small').textContent=S.cm['s'+i]}}
+// ===== screens =====
+function renH(){$('#home').innerHTML=`<div class="h">Featured Shows</div><div class="row hero" id="hr">${FEAT.map(i=>poster(i,'hero')).join('')}</div>`+row('Movies & Web Series',MOV)+row('History & Popular Classics',HIS)}
+function renD(){const k=Object.keys(S.dl);$('#downloads').innerHTML='<div class="h">⬇ Downloads</div>'+(k.length?k.map(id=>{const it=ALL.find(x=>x.id==id);return `<div class="card"><b>${it.t}</b><div class="pb"><i style="width:${S.dl[id]}%"></i></div><div class="mut">${S.dl[id]==100?'Downloaded':S.dl[id]+'%'}</div><button class="btn" onclick="detail(${id})">▶ Open</button><button class="btn g" onclick="delete S.dl[${id}];save();renD()">Remove</button></div>`}).join(''):'<p class="mut" style="padding:14px">Nothing downloaded yet. Open a title and tap Download.</p>')}
+function renL(){const g=a=>a.length?`<div class="grid">${a.map(id=>poster(ALL.find(x=>x.id==id))).join('')}</div>`:'<p class="mut" style="padding:0 14px">Empty</p>';
+$('#library').innerHTML=`<div class="h">▤ Library</div><div class="h2">My List</div>${g(S.list)}<div class="h2">Liked</div>${g(S.likes.filter(x=>typeof x=='number'))}<div class="h2">Watch History</div>${g(S.hist)}<div style="padding:14px"><button class="btn g" onclick="S.hist=[];save();renL()">Clear history</button></div>`}
+function renA(){const p=S.p,s=S.set,c=(k,l)=>`<div class="li"><span>${l}</span><input type="checkbox" style="width:auto" ${s[k]?'checked':''} onchange="S.set.${k}=this.checked?1:0;save()"></div>`;
+$('#account').innerHTML=`<div class="h">👤 Account</div><div class="card" style="text-align:center"><div class="av" style="background-image:url(${p.photo})"></div><h3 style="margin-top:8px">${esc(p.name||'ZUNORO User')}</h3><div class="mut">@${esc(p.user||'guest')}</div><p>${esc(p.bio||'Welcome to ZUNORO!')}</p></div>
+<div class="card"><b>Edit Profile</b><input id="pn" placeholder="Full name" value="${esc(p.name)}"><input id="pu" placeholder="Username" value="${esc(p.user)}"><textarea id="pb" placeholder="Bio">${esc(p.bio)}</textarea><input id="pp" type="file" accept="image/*"><button class="btn" onclick="saveP()">Save Profile</button></div>
+<div class="card"><b>Settings & Privacy</b>${c('auto','▶ Autoplay')}${c('notif','🔔 Notifications')}${c('priv','🔒 Private profile')}<div class="li"><span>🌐 Language</span><select style="width:auto" onchange="S.set.lang=this.value;save()">${['English','हिन्दी','Español'].map(l=>`<option ${s.lang==l?'selected':''}>${l}</option>`).join('')}</select></div></div>
+<div class="card"><b>Creator</b><p class="mut">Upload your own Short video</p><input id="up" type="file" accept="video/*"><button class="btn" onclick="upS()">Upload Short</button></div>
+<div class="card"><button class="btn g" onclick="openN()">🔔 Notifications</button><button class="btn g" onclick="openChat()">💬 Messages</button><button class="btn g" onclick="if(confirm('Delete all app data?')){localStorage.removeItem('zn');indexedDB.deleteDatabase('zn');location.reload()}">Logout / Reset</button><p class="mut" style="margin-top:8px">ZUNORO v1.0 • Online login needs backend (Firebase).</p></div>`}
+function saveP(){const f=$('#pp').files[0],fin=ph=>{S.p={name:$('#pn').value.trim(),user:$('#pu').value.trim().replace(/^@/,''),bio:$('#pb').value.trim(),photo:ph||S.p.photo};save();renA();addN('Profile updated')};if(f){const r=new FileReader();r.onload=()=>fin(r.result);r.readAsDataURL(f)}else fin()}
+async function upS(){const f=$('#up').files[0];if(!f||!f.type.startsWith('video/'))return alert('Select a video first');await idb(1,f);addN('Short uploaded ✔');alert('Uploaded! Open Shorts tab.')}
+function show(n){$$('.scr').forEach(s=>s.classList.toggle('on',s.id==n));$$('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.s==n));$('#shorts').querySelectorAll('video').forEach(v=>v.pause());
+({home:renH,shorts:renS,account:renA,downloads:renD,library:renL})[n]();if(n!='shorts')scrollTo(0,0)}
+$$('#nav button').forEach(b=>b.onclick=()=>show(b.dataset.s));
+setInterval(()=>{const h=$('#hr');if(h&&$('#home').classList.contains('on')&&!stack.length)h.scrollBy({left:h.scrollLeft+h.clientWidth*.8>h.scrollWidth-h.clientWidth?-h.scrollWidth:h.clientWidth*.8,behavior:'smooth'})},4000);
+renH();upd();
+</script></body></html>
